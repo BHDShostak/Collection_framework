@@ -1,25 +1,33 @@
-from app.app import unique_elements_counter
+import functools
+
+from app.app import count_unique_symbols
 import pytest
+import functools
+
+@pytest.mark.parametrize(
+    "text, result",
+    [
+        ("qwxqq", 2),
+        ("qw11d12xqq", 4),
+    ]
+)
+def test_case1(text, result):
+    assert count_unique_symbols(text) == result
+
+@functools.lru_cache(maxsize=None)
+    def test_cache_case(text: str) -> int:
+        return count_unique_symbols(text)
 
 
 @pytest.mark.parametrize(
-    "text, result, error",
+    "text",
     [
-        ("qwxqq", 2, False),
-        (121321, None, True),
-        (12.1321, None, True),
-        ([], None, True),
+        (121321, None),
+        (12.1321, None),
     ]
 )
-
-def test_case(text, result, error):
-    if error:
-        with pytest.raises(AssertionError):
-            unique_elements_counter(text)
-    else:
-        assert unique_elements_counter(text) == result
-
-
-
+def test_case2(text):
+    with pytest.raises(AssertionError):
+        count_unique_symbols(text)
 
 
