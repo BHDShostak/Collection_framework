@@ -3,19 +3,11 @@ from app.app import count_unique_symbols
 import pytest
 
 
-count_unique_symbols.cache_clear()
-@pytest.mark.parametrize(
-    "text, result",
-    [
-        ("qwxqq", 2),
-        ("qw11d12xqq", 4),
-    ]
-)
-
 @functools.lru_cache
-def test_case1(text, result):
-    assert count_unique_symbols(text) == result
+def test_cache():
+    count_unique_symbols.cache_clear()
     print(count_unique_symbols.cache_info())
+
 
 @pytest.mark.parametrize(
     "text",
@@ -26,13 +18,23 @@ def test_case1(text, result):
         (None),
         (True),
         (False),
-        (b'''Python Tutorial''')
+        b'Python Tutorial'
     ]
 )
 @functools.lru_cache
-def test_case2(text):
+def test_invalid_input(text):
     with pytest.raises(AssertionError):
         count_unique_symbols(text)
     print(count_unique_symbols.cache_info())
 
 
+@pytest.mark.parametrize(
+    "text, result",
+    [
+        ("qwxqq", 2),
+        ("qw11d12xqq", 4),
+    ]
+)
+def test_valid_input(text, result):
+    assert count_unique_symbols(text) == result
+    print(count_unique_symbols.cache_info())
