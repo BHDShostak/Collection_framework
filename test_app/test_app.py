@@ -1,9 +1,9 @@
 import functools
-
 from app.app import count_unique_symbols
 import pytest
-import functools
 
+
+count_unique_symbols.cache_clear()
 @pytest.mark.parametrize(
     "text, result",
     [
@@ -11,23 +11,28 @@ import functools
         ("qw11d12xqq", 4),
     ]
 )
+
+@functools.lru_cache
 def test_case1(text, result):
     assert count_unique_symbols(text) == result
-
-@functools.lru_cache(maxsize=None)
-    def test_cache_case(text: str) -> int:
-        return count_unique_symbols(text)
-
+    print(count_unique_symbols.cache_info())
 
 @pytest.mark.parametrize(
     "text",
     [
-        (121321, None),
-        (12.1321, None),
+        (121321),
+        (12.1321),
+        ((1, 2)),
+        (None),
+        (True),
+        (False),
+        (b'''Python Tutorial''')
     ]
 )
+@functools.lru_cache
 def test_case2(text):
     with pytest.raises(AssertionError):
         count_unique_symbols(text)
+    print(count_unique_symbols.cache_info())
 
 
